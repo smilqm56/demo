@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp">
+
+    <TextView
+        android:id="@+id/listview_detail_one_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="个山东高速东莞是公司德国大使馆收到广东省公司的公司多沙发三国杀的故事管理会计氨基酸的骄傲垃圾吗个发生的故事公司的公司松哥时光隧道松哥松哥"
+        android:textColor="#0e0d0d"
+        android:textSize="16sp" />
+
+</android.support.v7.widget.CardView>
