@@ -16,11 +16,14 @@
 
 package com.fxw.libray;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,6 +36,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.fxw.mylibrary.adapter.BaseQuickAdapter;
+import com.fxw.mylibrary.adapter.BaseViewHolder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +49,7 @@ public class SuperAwesomeCardFragment extends Fragment {
     private int position;
     private static final int[] drawables = {R.drawable.f, R.drawable.s, R.drawable.t, R.drawable.fo,
             R.drawable.fi, R.drawable.fi, R.drawable.fi, R.drawable.fi};
-    private ListView mListview;
+    private RecyclerView mListview;
     private List<String> list;
     private LinearLayout mGroup;
 
@@ -72,18 +78,20 @@ public class SuperAwesomeCardFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mGroup = (LinearLayout) view.findViewById(R.id.frag_one_group);
-        mListview = (ListView) view.findViewById(R.id.frag_one_list);
+        mListview = (RecyclerView) view.findViewById(R.id.frag_one_list);
         list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             list.add("");
         }
         mGroup.setBackgroundResource(drawables[position]);
         mListview.getBackground().setAlpha((int) (255 * 0.7));
-        MyAdapter mAdapter = new MyAdapter();
+        mListview.setLayoutManager(new LinearLayoutManager(getContext()));
+        MyAdapter mAdapter = new MyAdapter(getContext());
         mListview.setAdapter(mAdapter);
-        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mAdapter.addAll(list);
+        mAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(View view, int position) {
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         getActivity(), mGroup, "叶良辰");
                 startActivity(new Intent(getActivity(), OneDetailActivity.class),options.toBundle());
@@ -102,39 +110,18 @@ public class SuperAwesomeCardFragment extends Fragment {
     }
 
 
-    private class MyAdapter extends BaseAdapter {
+    private class MyAdapter extends BaseQuickAdapter<String> {
 
 
-        @Override
-        public int getCount() {
-            return list.size();
+        public MyAdapter(Context context) {
+            super(context, R.layout.listview_item);
         }
 
         @Override
-        public String getItem(int position) {
-            return list.get(position);
+        protected void convert(BaseViewHolder helper, String item) {
+
         }
 
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View v, ViewGroup parent) {
-            ViewHolder mHolder = null;
-            if (v == null) {
-                v = getActivity().getLayoutInflater().inflate(R.layout.listview_item, parent, false);
-                mHolder = new ViewHolder();
-                mHolder.textView = (TextView) v.findViewById(R.id.listview_tv);
-                v.setTag(mHolder);
-            } else mHolder = (ViewHolder) v.getTag();
-            return v;
-        }
-
-        private class ViewHolder {
-            TextView textView;
-        }
     }
 
 
