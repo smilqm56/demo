@@ -18,6 +18,8 @@ package com.fxw.libray;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -46,7 +48,7 @@ public class SuperAwesomeCardFragment extends Fragment {
 
     private static final String ARG_POSITION = "position";
 
-    private int position;
+    private int mPosition;
     private static final int[] drawables = {R.drawable.f, R.drawable.s, R.drawable.t, R.drawable.fo,
             R.drawable.fi, R.drawable.fi, R.drawable.fi, R.drawable.fi};
     private RecyclerView mListview;
@@ -65,7 +67,7 @@ public class SuperAwesomeCardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        position = getArguments().getInt(ARG_POSITION);
+        mPosition = getArguments().getInt(ARG_POSITION);
     }
 
 
@@ -83,7 +85,7 @@ public class SuperAwesomeCardFragment extends Fragment {
         for (int i = 0; i < 10; i++) {
             list.add("");
         }
-        mGroup.setBackgroundResource(drawables[position]);
+        mGroup.setBackgroundResource(drawables[mPosition]);
         mListview.getBackground().setAlpha((int) (255 * 0.7));
         mListview.setLayoutManager(new LinearLayoutManager(getContext()));
         MyAdapter mAdapter = new MyAdapter(getContext());
@@ -92,9 +94,12 @@ public class SuperAwesomeCardFragment extends Fragment {
         mAdapter.setOnRecyclerViewItemClickListener(new BaseQuickAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(), mGroup, "叶良辰");
-                startActivity(new Intent(getActivity(), OneDetailActivity.class),options.toBundle());
+               ActivityOptionsCompat options = ActivityOptionsCompat.makeScaleUpAnimation(view,(int)view.getX(), (int)view.getY(), view.getWidth(), view.getHeight());
+//                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity());
+//                BitmapDrawable bd = (BitmapDrawable) getActivity().getResources().getDrawable(drawables[mPosition]);
+//                Bitmap bitmap = bd.getBitmap();
+//                ActivityOptionsCompat options = ActivityOptionsCompat.makeThumbnailScaleUpAnimation(view, bitmap, (int) view.getX(), (int) view.getY());
+                startActivity(new Intent(getActivity(), OneDetailActivity.class), options.toBundle());
             }
         });
     }
