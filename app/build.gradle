@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:palette-v7:23.0.+'
     compile project(':fwxlibrary')
+    compile 'io.reactivex:rxjava:1.1.3'
 }
