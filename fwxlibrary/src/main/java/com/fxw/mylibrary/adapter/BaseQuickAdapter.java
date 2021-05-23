@@ -80,6 +80,15 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<RecyclerV
 
     /**
      * 添加数据
+     * @param item
+     */
+    public void add(T item) {
+        data.add(item);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 添加数据
      * @param list
      */
     public void addAll(List<T> list) {

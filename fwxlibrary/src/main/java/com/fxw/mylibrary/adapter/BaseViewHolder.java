@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.fxw.mylibrary.util.GlideUtil;
 import com.fxw.mylibrary.util.ImageloaderUtil;
 
 /**
@@ -140,7 +141,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder{
      */
     public BaseViewHolder setImageUrl(int viewId, String imageUrl) {
         ImageView view = retrieveView(viewId);
-        ImageloaderUtil.setImage(imageUrl, view);
+        GlideUtil.setImage(context,imageUrl, view);
+//        ImageloaderUtil.setImage(imageUrl, view);
         return this;
     }
 
@@ -153,7 +155,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder{
      */
     public BaseViewHolder setImageUrl(int viewId, String imageUrl, int drawable) {
         ImageView view = retrieveView(viewId);
-        ImageloaderUtil.setImage(imageUrl, view, drawable);
+        GlideUtil.setImage(context,imageUrl, view, drawable);
+//        ImageloaderUtil.setImage(imageUrl, view, drawable);
         return this;
     }
 

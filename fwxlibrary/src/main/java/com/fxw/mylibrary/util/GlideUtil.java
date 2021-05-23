@@ -19,7 +19,7 @@ public class GlideUtil {
      * @param imageView 控件
      */
     public static  void setImage(Context context, String uri, ImageView imageView){
-        Glide.with(context).load(uri).into(imageView);
+        Glide.with(context).load(uri).crossFade().into(imageView);
     }
 
     /**
@@ -29,7 +29,7 @@ public class GlideUtil {
      * @param image		等待图片
      */
     public static  void setImage(Context context,String uri,ImageView imageView,int image){
-        Glide.with(context).load(uri).error(image).into(imageView);
+        Glide.with(context).load(uri).placeholder(image).error(image).into(imageView);
     }
 
 }

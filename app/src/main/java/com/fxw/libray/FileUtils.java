@@ -48,6 +48,7 @@ public class FileUtils {
 	}
 
 	private FileUtils(Context context) {
+
 		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			cacheDir = new File(CACHE_DIR, "/cache");
 		} else {

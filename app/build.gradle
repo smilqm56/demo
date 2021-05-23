@@ -28,4 +28,6 @@ dependencies {
     compile 'com.android.support:palette-v7:23.0.+'
     compile project(':fwxlibrary')
     compile 'io.reactivex:rxjava:1.1.3'
+    compile 'com.wuxiaolong.pullloadmorerecyclerview:library:1.0.4'
+    compile 'com.bm.photoview:library:1.4.0'
 }

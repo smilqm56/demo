@@ -17,19 +17,43 @@
     </LinearLayout>
     <!-- 侧滑菜单内容 -->
 
-    <LinearLayout
+    <com.fxw.mylibrary.widget.BouncyLinearLayout
         android:id="@+id/drawer_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@drawable/drawer"
+        android:background="@color/white"
         android:clickable="true"
         android:orientation="vertical"
         android:padding="8dp">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:text="叶良辰" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:text="叶良辰" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:text="叶良辰" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="40dp"
+            android:text="叶良辰" />
+    </com.fxw.mylibrary.widget.BouncyLinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

@@ -1,11 +1,14 @@
 package com.fxw.libray;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -23,7 +27,14 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.fxw.mylibrary.adapter.BaseQuickAdapter;
+import com.fxw.mylibrary.adapter.BaseViewHolder;
+import com.fxw.mylibrary.util.PermissionsUtil;
+import com.fxw.mylibrary.widget.BouncyRecyclerView;
+
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements PermissionsUtil.RequestPerissionsListeners {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -35,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PermissionsUtil.setRequestPerissionsListeners(this);
+        boolean mPermission = PermissionsUtil.requestArrayPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 10);
+        if (mPermission) {
+            initView();
+        }
+    }
+
+
+    private void initView() {
+        new initImageLoader(AppContext.getInstance().getApplicationContext());
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 //        toolbar.setTitle("Rocko");// 标题的文字需在setSupportActionBar之前，不然会无效
 //        toolbar.setSubtitle("副标题");
         setSupportActionBar(toolbar);
-		/* 这些通过ActionBar来设置也是一样的，注意要在setSupportActionBar(toolbar);之后，不然就报错了 */
+        /* 这些通过ActionBar来设置也是一样的，注意要在setSupportActionBar(toolbar);之后，不然就报错了 */
         // getSupportActionBar().setTitle("标题");
         // getSupportActionBar().setSubtitle("副标题");
         // getSupportActionBar().setLogo(R.drawable.ic_launcher);
@@ -70,9 +91,10 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mTabLayout = (TabLayout)findViewById(R.id.tabs);
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        MyPagerAdapter mAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         colorChange(0);
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -150,12 +172,11 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 颜色加深处理
      *
-     * @param RGBValues
-     *            RGB的值，由alpha（透明度）、red（红）、green（绿）、blue（蓝）构成，
-     *            Android中我们一般使用它的16进制，
-     *            例如："#FFAABBCC",最左边到最右每两个字母就是代表alpha（透明度）、
-     *            red（红）、green（绿）、blue（蓝）。每种颜色值占一个字节(8位)，值域0~255
-     *            所以下面使用移位的方法可以得到每种颜色的值，然后每种颜色值减小一下，在合成RGB颜色，颜色就会看起来深一些了
+     * @param RGBValues RGB的值，由alpha（透明度）、red（红）、green（绿）、blue（蓝）构成，
+     *                  Android中我们一般使用它的16进制，
+     *                  例如："#FFAABBCC",最左边到最右每两个字母就是代表alpha（透明度）、
+     *                  red（红）、green（绿）、blue（蓝）。每种颜色值占一个字节(8位)，值域0~255
+     *                  所以下面使用移位的方法可以得到每种颜色的值，然后每种颜色值减小一下，在合成RGB颜色，颜色就会看起来深一些了
      * @return
      */
     private int colorBurn(int RGBValues) {
@@ -169,10 +190,26 @@ public class MainActivity extends AppCompatActivity {
         return Color.rgb(red, green, blue);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionsUtil.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void requestPerissionsSuccess(int requestCode) {
+        initView();
+    }
+
+    @Override
+    public void requestPerissionsFailed(int requestCode, List<String> deniedPermissions) {
+
+    }
+
     /* ***************FragmentPagerAdapter***************** */
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
-        private final String[] TITLES = { "分类", "主页", "热门推荐", "热门收藏", "本月热榜", "今日热榜", "专栏", "随机" };
+        private final String[] TITLES = {"分类", "主页", "热门推荐", "热门收藏", "本月热榜", "今日热榜", "专栏", "随机"};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -191,6 +228,20 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             return SuperAwesomeCardFragment.newInstance(position);
+        }
+
+    }
+
+    private class MyAdapter extends BaseQuickAdapter<String> {
+
+
+        public MyAdapter(Context context) {
+            super(context, R.layout.listview_item);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder helper, String item) {
+            helper.setImageUrl(R.id.listview_iv, ImageList.getImagerUrl());
         }
 
     }
